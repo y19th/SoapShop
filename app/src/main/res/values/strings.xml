@@ -7,4 +7,6 @@
     <string name="placeholder_surname">Фамилия</string>
     <string name="placeholder_phone">Номер телефона</string>
     <string name="registration_button_enter">Войти</string>
+    <string name="phone_error">Неверно введен телефон</string>
+    <string name="text_error">Неверно введено поле %s</string>
 </resources>

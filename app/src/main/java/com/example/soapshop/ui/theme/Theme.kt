@@ -47,7 +47,10 @@ private val LightColorScheme = lightColorScheme(
     primary = Pink,
     onPrimary = White,
     secondary = LightPink,
-    onSecondary = White
+    onSecondary = White,
+
+    error = Orange,
+    onError = Orange
 
 )
 
