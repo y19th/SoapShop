@@ -3,6 +3,7 @@ package com.example.soapshop.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -10,6 +11,11 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.structuralEqualityPolicy
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -57,7 +63,9 @@ fun SoapShopTheme(
         val context = LocalContext.current
         if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
       }*/
-      darkTheme -> DarkColorScheme
+      darkTheme -> {
+          DarkColorScheme
+      }
       else -> LightColorScheme
     }
     val view = LocalView.current
@@ -74,3 +82,22 @@ fun SoapShopTheme(
       content = content
     )
 }
+
+
+var disabledState by mutableStateOf(LightGrey, structuralEqualityPolicy())
+    private set
+var onDisabledState by mutableStateOf(Grey, structuralEqualityPolicy())
+    private set
+
+@Suppress("UnusedReceiverParameter")
+var ColorScheme.disabled: Color
+    get() = disabledState
+    private set(value) {
+        disabledState = value
+    }
+@Suppress("UnusedReceiverParameter")
+var ColorScheme.onDisabled: Color
+    get() = onDisabledState
+    private set(value) {
+        onDisabledState = value
+    }

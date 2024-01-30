@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">SoapShop</string>
+    <string name="registration_enter">Вход</string>
+    <string name="registration_terms">Нажимая кнопку "Войти", Вы принимаете</string>
+    <string name="registration_underlined_terms">условия программы лояльности</string>
+    <string name="placeholder_name">Имя</string>
+    <string name="placeholder_surname">Фамилия</string>
+    <string name="placeholder_phone">Номер телефона</string>
+    <string name="registration_button_enter">Войти</string>
 </resources>
