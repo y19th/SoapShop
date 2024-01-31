@@ -1,20 +1,26 @@
 package com.example.soapshop.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.soapshop.domain.events.CatalogEvents
 import com.example.soapshop.domain.models.catalog.CatalogPinModel
 import com.example.soapshop.domain.states.CatalogState
+import com.example.soapshop.domain.usecase.CatalogUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CatalogViewModel @Inject constructor(
-
+    catalogUseCase: CatalogUseCase
 ): ViewModel(){
 
+    companion object {
+        const val TAG = "CatalogViewModel"
+    }
 
     private val _state = MutableStateFlow(CatalogState())
     val state = _state.asStateFlow()
@@ -30,6 +36,9 @@ class CatalogViewModel @Inject constructor(
                     CatalogPinModel(title = "Маски")
                 )
             )
+        }
+        viewModelScope.launch {
+            catalogUseCase.receiveProducts()
         }
     }
 

@@ -52,9 +52,10 @@ android {
 }
 
 dependencies {
-    val dagger_version = "2.48"
-    val room_version = "2.6.1"
+    val daggerVersion = "2.48"
+    val roomVersion = "2.6.1"
     val navigationVersion = "2.7.6"
+    val retrofitVersion = "2.9.0"
 
 
 
@@ -62,19 +63,23 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$navigationVersion")
 
     //dagger
-    implementation("com.google.dagger:dagger:$dagger_version")
-    implementation ("com.google.dagger:dagger-android-support:$dagger_version")
-    ksp("com.google.dagger:dagger-compiler:$dagger_version")
+    implementation("com.google.dagger:dagger:$daggerVersion")
+    implementation ("com.google.dagger:dagger-android-support:$daggerVersion")
+    ksp("com.google.dagger:dagger-compiler:$daggerVersion")
 
     //hilt
-    implementation ("com.google.dagger:hilt-android:$dagger_version")
+    implementation ("com.google.dagger:hilt-android:$daggerVersion")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
-    ksp ("com.google.dagger:hilt-compiler:$dagger_version")
+    ksp ("com.google.dagger:hilt-compiler:$daggerVersion")
 
     //room
-    implementation ("androidx.room:room-runtime:$room_version")
-    implementation ("androidx.room:room-ktx:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
+    implementation ("androidx.room:room-runtime:$roomVersion")
+    implementation ("androidx.room:room-ktx:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
+
+    // retrofit
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
 
 
     implementation("androidx.core:core-ktx:1.12.0")
