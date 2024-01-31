@@ -14,4 +14,8 @@
     <string name="bar_cart">Корзина</string>
     <string name="bar_discounts">Акции</string>
     <string name="bar_profile">Профиль</string>
+    <string name="filter_popular">По популярности</string>
+    <string name="filter_priceRise">По возрастанию цены</string>
+    <string name="filter_priceDown">По уменьшению цены</string>
+    <string name="catalog_filter">Фильтры</string>
 </resources>

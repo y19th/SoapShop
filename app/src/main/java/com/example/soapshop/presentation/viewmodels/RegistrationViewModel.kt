@@ -9,6 +9,7 @@ import com.example.soapshop.domain.states.RegistrationState
 import com.example.soapshop.domain.usecase.RoomUseCase
 import com.example.soapshop.navigation.models.Routes
 import com.example.soapshop.room.entites.UserEntity
+import com.example.soapshop.util.extension.isPhone
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -103,6 +104,3 @@ class RegistrationViewModel @Inject constructor(
     }
 }
 
-fun String.isPhone(): Boolean {
-    return PhoneNumberUtils.isGlobalPhoneNumber(this) && this.length == 10
-}

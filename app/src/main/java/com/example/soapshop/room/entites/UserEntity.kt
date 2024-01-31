@@ -3,7 +3,7 @@ package com.example.soapshop.room.entites
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.soapshop.domain.models.UserModel
+import com.example.soapshop.domain.models.registration.UserModel
 
 @Entity(tableName = "users")
 data class UserEntity(

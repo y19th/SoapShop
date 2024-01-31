@@ -8,8 +8,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.soapshop.navigation.models.Routes
-import com.example.soapshop.presentation.screens.CatalogScreen
-import com.example.soapshop.presentation.screens.RegistrationScreen
+import com.example.soapshop.presentation.screens.catalog.CatalogScreen
+import com.example.soapshop.presentation.screens.main.MainScreen
+import com.example.soapshop.presentation.screens.registration.RegistrationScreen
 
 @Composable
 fun NavHostContainer(
@@ -23,7 +24,7 @@ fun NavHostContainer(
         startDestination = Routes.REGISTRATION.name,
         builder = {
             composable(route = Routes.MAIN.name) {
-
+                MainScreen()
             }
             composable(route = Routes.CATALOG.name) {
                 CatalogScreen()

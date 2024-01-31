@@ -1,4 +1,4 @@
-package com.example.soapshop.presentation.screens
+package com.example.soapshop.presentation.screens.registration
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

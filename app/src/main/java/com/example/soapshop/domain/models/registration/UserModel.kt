@@ -1,4 +1,4 @@
-package com.example.soapshop.domain.models
+package com.example.soapshop.domain.models.registration
 
 data class UserModel(
     val id: Int = 0,
