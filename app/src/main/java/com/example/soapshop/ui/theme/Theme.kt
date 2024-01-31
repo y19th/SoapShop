@@ -57,7 +57,9 @@ private val LightColorScheme = lightColorScheme(
     onSecondary = White,
 
     error = Orange,
-    onError = Orange
+    onError = Orange,
+
+    outline = LightGrey
 
 )
 
