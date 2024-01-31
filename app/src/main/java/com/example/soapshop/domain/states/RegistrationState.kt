@@ -8,6 +8,8 @@ data class RegistrationState(
     val surname: String = "",
     val phone: String = "",
 
+    val isLoading: Boolean = true,
+
     val isNameError: Boolean = false,
     val isSurnameError: Boolean = false,
     val isPhoneError: Boolean = false,

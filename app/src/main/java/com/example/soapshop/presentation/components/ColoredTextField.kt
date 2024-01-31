@@ -99,13 +99,15 @@ fun ColoredTextField(
                     )
                 },
                 trailingIcon = {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_tralling_cancel),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .clickable { onValueChange.invoke("") }
-                    )
+                    if(value.isNotEmpty()) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_tralling_cancel),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .clickable { onValueChange.invoke("") }
+                        )
+                    }
                 },
                 placeholder = {
                     Text(

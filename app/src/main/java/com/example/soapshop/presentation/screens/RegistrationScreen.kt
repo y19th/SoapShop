@@ -69,14 +69,14 @@ fun RegistrationScreen(
                     R.string.text_error,
                     stringResource(id = R.string.placeholder_name)
                 ),
-                isEnabled = true,
+                isEnabled = state.isLoading.not(),
                 placeHolderText = stringResource(id = R.string.placeholder_name)
             )
 
             ColoredTextField(
                 value = state.surname,
                 onValueChange = { viewModel.onEvent(RegistrationEvents.OnSurnameChange(newValue = it)) },
-                isEnabled = true,
+                isEnabled = state.isLoading.not(),
                 isError = state.isSurnameError,
                 errorText = stringResource(
                     R.string.text_error,
@@ -91,7 +91,7 @@ fun RegistrationScreen(
                         viewModel.onEvent(RegistrationEvents.OnPhoneChange(newValue = newValue))
                     }
                 },
-                isEnabled = true,
+                isEnabled = state.isLoading.not(),
                 isError = state.isPhoneError,
                 placeHolderText = stringResource(id = R.string.placeholder_phone),
                 mask = PhoneMask()
@@ -101,7 +101,7 @@ fun RegistrationScreen(
                 modifier = Modifier.padding(vertical = 16.dp),
                 text = stringResource(id = R.string.registration_button_enter),
                 isEnabled = state.isValid,
-                onClick = { viewModel.onEvent(RegistrationEvents.OnLogin) }
+                onClick = { viewModel.onEvent(RegistrationEvents.OnLogin(navController)) }
             )
         }
         

@@ -63,6 +63,7 @@ class RegistrationViewModel @Inject constructor(
             }
 
             is RegistrationEvents.OnLogin -> {
+                _state.update { it.copy(isLoading = true) }
                 viewModelScope.launch {
                     with(state.value) {
                         roomUseCase.insertUsers(
@@ -73,14 +74,17 @@ class RegistrationViewModel @Inject constructor(
                                 phone = phone
                             )
                         )
+                        event.navController.navigate(Routes.CATALOG.name)
                     }
-                    Log.d(TAG,roomUseCase.receiveUsers().toString())
                 }
             }
             is RegistrationEvents.OnCheckAuth -> {
                 viewModelScope.launch {
                     if (roomUseCase.receiveUsers().isNotEmpty()) {
                         event.navController.navigate(route = Routes.CATALOG.name)
+                    }
+                    else {
+                        _state.update { it.copy(isLoading = false) }
                     }
                 }
             }

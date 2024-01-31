@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 
 sealed interface RegistrationEvents {
 
-    data object OnLogin: RegistrationEvents
+    data class OnLogin(val navController: NavController): RegistrationEvents
 
     data class OnCheckAuth(val navController: NavController): RegistrationEvents
 
