@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.example.soapshop.navigation.NavHostContainer
 import com.example.soapshop.presentation.screens.RegistrationScreen
 import com.example.soapshop.ui.theme.SoapShopTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,13 +17,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SoapShopTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    RegistrationScreen()
-                }
+            SoapShopTheme { paddingValues, navHostController ->
+                NavHostContainer(
+                    navHostController = navHostController,
+                    paddingValues = paddingValues
+                )
             }
         }
     }

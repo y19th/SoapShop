@@ -3,8 +3,11 @@ package com.example.soapshop.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -15,11 +18,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.structuralEqualityPolicy
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.soapshop.presentation.components.MainBottomBar
 
 private val DarkColorScheme = darkColorScheme(
     background = White,
@@ -59,8 +66,11 @@ fun SoapShopTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    content: @Composable (PaddingValues, NavHostController) -> Unit
 ) {
+
+    val navController = rememberNavController()
+
     val colorScheme = when {
       /*dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
         val context = LocalContext.current
@@ -81,9 +91,19 @@ fun SoapShopTheme(
     }
     MaterialTheme(
       colorScheme = colorScheme,
-      typography = Typography,
-      content = content
-    )
+      typography = Typography
+    ) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            containerColor = MaterialTheme.colorScheme.background,
+            bottomBar = {
+                MainBottomBar(navController = navController)
+            },
+            content = { paddingValues ->
+                content.invoke(paddingValues,navController)
+            }
+        )
+    }
 }
 
 

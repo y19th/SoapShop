@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -16,6 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.soapshop.R
 import com.example.soapshop.domain.events.RegistrationEvents
 import com.example.soapshop.presentation.components.ColoredTextField
@@ -29,9 +32,14 @@ import com.example.soapshop.util.PhoneMask
 @Composable
 fun RegistrationScreen(
     viewModel: RegistrationViewModel = hiltViewModel(),
+    navController: NavController = rememberNavController()
 ) {
 
     val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(null) {
+        viewModel.onEvent(RegistrationEvents.OnCheckAuth(navController))
+    }
 
     Column(
         modifier = Modifier
@@ -93,7 +101,7 @@ fun RegistrationScreen(
                 modifier = Modifier.padding(vertical = 16.dp),
                 text = stringResource(id = R.string.registration_button_enter),
                 isEnabled = state.isValid,
-                onClick = {}
+                onClick = { viewModel.onEvent(RegistrationEvents.OnLogin) }
             )
         }
         

@@ -53,16 +53,28 @@ android {
 
 dependencies {
     val dagger_version = "2.48"
+    val room_version = "2.6.1"
+    val navigationVersion = "2.7.6"
 
+
+
+    //navigation
+    implementation("androidx.navigation:navigation-compose:$navigationVersion")
 
     //dagger
     implementation("com.google.dagger:dagger:$dagger_version")
     implementation ("com.google.dagger:dagger-android-support:$dagger_version")
     ksp("com.google.dagger:dagger-compiler:$dagger_version")
+
     //hilt
     implementation ("com.google.dagger:hilt-android:$dagger_version")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     ksp ("com.google.dagger:hilt-compiler:$dagger_version")
+
+    //room
+    implementation ("androidx.room:room-runtime:$room_version")
+    implementation ("androidx.room:room-ktx:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
 
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -72,7 +84,8 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material3:material3:1.1.2")
+    implementation("androidx.compose.material:material:1.6.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

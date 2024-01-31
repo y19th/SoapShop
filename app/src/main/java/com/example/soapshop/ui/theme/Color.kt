@@ -13,3 +13,6 @@ val Black = Color(0xFF000000)
 val LightGreyDarker= Color(0xFFDEDEDE)
 val DarkBlue = Color(0xFF52606D)
 val DarkGreyDarker = Color(0xFF333333)
+
+
+val BottomBarStroke = Color(0xFFE8E9EC)
