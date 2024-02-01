@@ -8,47 +8,56 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.soapshop.R
 import com.example.soapshop.domain.events.CatalogEvents
 import com.example.soapshop.domain.models.catalog.CatalogPinModel
+import com.example.soapshop.domain.models.catalog.CatalogTag
+import com.example.soapshop.domain.models.catalog.ProductModel
 import com.example.soapshop.presentation.components.HorizontalSpacer
 import com.example.soapshop.presentation.components.VerticalSpacer
 import com.example.soapshop.presentation.screens.catalog.components.CatalogDropDownButton
 import com.example.soapshop.presentation.viewmodels.CatalogViewModel
+import com.example.soapshop.presentation.viewmodels.ProductMap
 import com.example.soapshop.ui.theme.Black
 import com.example.soapshop.ui.theme.DarkBlue
 import com.example.soapshop.ui.theme.DarkGrey
@@ -60,15 +69,38 @@ import com.example.soapshop.ui.theme.White
 
 @Composable
 fun CatalogScreen(
-    viewModel: CatalogViewModel = hiltViewModel()
+    viewModel: CatalogViewModel = hiltViewModel(),
+    navController: NavController = rememberNavController()
 ) {
 
     val state by viewModel.state.collectAsState()
 
+    val filtered by rememberSaveable(state.selectedPin,state.products) {
+        mutableStateOf(
+            with(state) {
+                if (selectedPin.tag is CatalogTag.All || selectedPin.tag is CatalogTag.Deleted) {
+                    products
+                } else {
+                    products.filter { productModel ->
+                        productModel.tags.contains(selectedPin.tag.tag)
+                    }
+                }
+            }
+        )
+    }
+    val rowCount by rememberSaveable(filtered) {
+        if(filtered.size % 2 == 0) {
+            mutableIntStateOf(filtered.size / 2)
+        } else {
+            mutableIntStateOf(filtered.size / 2 + 1)
+        }
+    }
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(all = 16.dp),
+            .padding(top = 16.dp, start = 16.dp, end = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -122,26 +154,41 @@ fun CatalogScreen(
                 )
             }
         }
-        Column(verticalArrangement = Arrangement.spacedBy(7.dp)) {
-            Row (
-                horizontalArrangement = Arrangement.spacedBy(7.dp)
-            ){
-                CatalogItem(
-                    modifier = Modifier.weight(0.5f)
-                )
-                CatalogItem(
-                    modifier = Modifier.weight(0.5f)
-                )
-            }
-            Row (
-                horizontalArrangement = Arrangement.spacedBy(7.dp)
-            ){
-                CatalogItem(
-                    modifier = Modifier.weight(0.5f)
-                )
-                CatalogItem(
-                    modifier = Modifier.weight(0.5f)
-                )
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(7.dp)
+        ) {
+            if(filtered.isNotEmpty()) {
+                items(rowCount) {
+                    val index = it * 2
+                    Row(
+                        modifier = Modifier.fillMaxHeight(0.1f),
+                        horizontalArrangement = Arrangement.spacedBy(7.dp)
+                    ) {
+                        CatalogItem(
+                            modifier = Modifier.weight(0.5f),
+                            item = filtered[index],
+                            onItemClick = {
+                                viewModel.onEvent(CatalogEvents.OnItemClick(
+                                    itemId = filtered[index].id,
+                                    navController = navController
+                                ))
+                            }
+                        )
+
+                        if(filtered.size > index + 1) {
+                            CatalogItem(
+                                modifier = Modifier.weight(0.5f),
+                                item = filtered[index + 1],
+                                onItemClick = {
+                                    viewModel.onEvent(CatalogEvents.OnItemClick(
+                                        itemId = filtered[index + 1].id,
+                                        navController = navController
+                                    ))
+                                }
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -151,10 +198,19 @@ fun CatalogScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CatalogItem(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    item: ProductModel,
+    onItemClick: (String) -> Unit
 ) {
+    val images by rememberSaveable(item) {
+        mutableStateOf(ProductMap.map[item.id])
+    }
+
+
     val pagerState = rememberPagerState(
-        pageCount = { 2 }
+        pageCount = {
+            images?.size ?: 0
+        }
     )
 
     Box(
@@ -164,6 +220,9 @@ fun CatalogItem(
                 color = MaterialTheme.colorScheme.outline,
                 shape = RoundedCornerShape(8.dp)
             )
+            .clickable {
+                onItemClick.invoke(item.id)
+            }
             .then(modifier)
     ) {
         Column(
@@ -174,8 +233,9 @@ fun CatalogItem(
         ) {
             HorizontalPager(state = pagerState) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_deep_clean),
-                    contentDescription = null
+                    painter = painterResource(id = images?.get(it) ?: R.drawable.ic_body_lotion),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillWidth
                 )
             }
             Row(
@@ -201,7 +261,7 @@ fun CatalogItem(
             }
             CrossedText(
                 modifier = Modifier.padding(vertical = 3.dp),
-                title = "749 P"
+                title = item.price.price
             )
 
             Row(
@@ -210,13 +270,13 @@ fun CatalogItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "489 P",
+                    text = item.price.priceWithDiscount,
                     style = MainTypography.titleMedium,
                     color = Black
                 )
 
                 Text(
-                    text = "-35%",
+                    text = "-${item.price.discount}%",
                     style = MainTypography.elementText,
                     color = White,
                     modifier = Modifier
@@ -231,16 +291,19 @@ fun CatalogItem(
             }
 
             Text(
-                text = "ESFOLIO",
+                text = item.title,
                 style = MainTypography.titleSmall,
                 color = Black,
                 modifier = Modifier.padding(vertical = 2.dp)
             )
 
             Text(
-                text = "Лосьон для тела`ESFOLIO` COENZYME Q 10 Увлажняющий 500 мл",
+                text = item.subtitle,
                 style = MainTypography.caption,
-                color = DarkGrey
+                color = DarkGrey,
+                modifier = Modifier.heightIn(
+                    min = 40.dp
+                )
             )
 
             VerticalSpacer(height = 4.dp)
@@ -259,12 +322,12 @@ fun CatalogItem(
                     tint = Orange
                 )
                 Text(
-                    text = "4.5",
+                    text = item.feedback.rating.toString(),
                     style = MainTypography.elementText,
                     color = Orange
                 )
                 Text(
-                    text = "(51)",
+                    text = "(${item.feedback.count})",
                     style = MainTypography.elementText,
                     color = Grey
                 )

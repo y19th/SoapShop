@@ -1,5 +1,6 @@
 package com.example.soapshop.data.models
 
+import com.example.soapshop.domain.models.catalog.ProductModel
 import com.google.gson.annotations.SerializedName
 
 data class ProductResponse(
@@ -13,4 +14,17 @@ data class ProductResponse(
     @SerializedName("description") val description: String = "",
     @SerializedName("info") val info: List<InfoResponse> = listOf(),
     @SerializedName("ingredients") val ingredients: String = ""
-)
+) {
+    fun toProductModel() = ProductModel(
+        id = id,
+        title = title,
+        subtitle = subtitle,
+        price = price.toPriceModel(),
+        feedback = feedback.toFeedbackModel(),
+        tags = tags,
+        available = available,
+        description = description,
+        info = info.map { response -> response.toInfoModel() },
+        ingredients = ingredients
+    )
+}
