@@ -39,11 +39,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -66,6 +68,7 @@ import com.example.soapshop.ui.theme.LightGrey
 import com.example.soapshop.ui.theme.MainTypography
 import com.example.soapshop.ui.theme.Orange
 import com.example.soapshop.ui.theme.White
+import com.example.soapshop.util.extension.withUnit
 
 @Composable
 fun CatalogScreen(
@@ -261,7 +264,7 @@ fun CatalogItem(
             }
             CrossedText(
                 modifier = Modifier.padding(vertical = 3.dp),
-                title = item.price.price
+                title = item.price.price.withUnit(item.price.unit)
             )
 
             Row(
@@ -270,23 +273,13 @@ fun CatalogItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = item.price.priceWithDiscount,
+                    text = item.price.priceWithDiscount.withUnit(item.price.unit),
                     style = MainTypography.titleMedium,
                     color = Black
                 )
 
-                Text(
-                    text = "-${item.price.discount}%",
-                    style = MainTypography.elementText,
-                    color = White,
-                    modifier = Modifier
-                        .padding(vertical = 1.dp)
-
-                        .background(
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(4.dp)
-                        )
-                        .padding(vertical = 3.dp, horizontal = 6.dp)
+                DiscountText(
+                    title = item.price.discount
                 )
             }
 
@@ -376,17 +369,19 @@ fun CatalogItem(
 @Composable
 fun CrossedText(
     modifier: Modifier = Modifier,
-    title: String
+    title: String,
+    contentColor: Color = Grey,
+    textStyle: TextStyle = MainTypography.elementText
 ) {
     Text(
         text = title,
-        style = MainTypography.elementText,
-        color = Grey,
+        style = textStyle,
+        color = contentColor,
         modifier = Modifier
             .drawWithContent {
                 drawContent()
                 drawLine(
-                    color = Grey,
+                    color = contentColor,
                     strokeWidth = 2.dp.value,
                     start = Offset(x = 0f, y = this.size.height * 0.75f),
                     end = Offset(x = this.size.width, y = this.size.height * 0.25f)
@@ -396,7 +391,24 @@ fun CrossedText(
     )
 }
 
+@Composable
+fun DiscountText(
+    title: String = ""
+) {
+    Text(
+        text = "-$title%",
+        style = MainTypography.elementText,
+        color = White,
+        modifier = Modifier
+            .padding(vertical = 1.dp)
 
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(4.dp)
+            )
+            .padding(vertical = 3.dp, horizontal = 6.dp)
+    )
+}
 
 @Composable
 fun CatalogPin(

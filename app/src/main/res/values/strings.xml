@@ -18,4 +18,28 @@
     <string name="filter_priceRise">По возрастанию цены</string>
     <string name="filter_priceDown">По уменьшению цены</string>
     <string name="catalog_filter">Фильтры</string>
+    <string name="product_order_accessible">Доступно для заказа %d штук</string>
+    <string name="product_reviews">%d отзыва</string>
+    <plurals name="items_access">
+        <item quantity="zero">Недоступно для заказа</item>
+        <item quantity="one">Доступна для заказа %d штука</item>
+        <item quantity="two">Доступно для заказа %d штуки</item>
+        <item quantity="few">Доступно для заказа %d штуки</item>
+        <item quantity="many">Доступно для заказа %d штук</item>
+        <item quantity="other">Доступно для заказа %d штук</item>
+    </plurals>
+    <plurals name="reviews">
+        <item quantity="zero">Нет отзывов</item>
+        <item quantity="one">%d отзыв</item>
+        <item quantity="two">%d отзыва</item>
+        <item quantity="few">%d отзыва</item>
+        <item quantity="many">%d отзывов</item>
+        <item quantity="other">%d отзывов</item>
+    </plurals>
+    <string name="product_section_desc">Описание</string>
+    <string name="product_section_attr">Характеристики</string>
+    <string name="product_section_ingr">Состав</string>
+    <string name="hide_button">Скрыть</string>
+    <string name="additional_button">Подробнее</string>
+    <string name="add_to_cart">Добавить корзину</string>
 </resources>
