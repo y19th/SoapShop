@@ -1,11 +1,11 @@
-package com.example.soapshop.room.schema
+package com.example.soapshop.data.room.schema
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.soapshop.room.dao.MainDao
-import com.example.soapshop.room.entites.UserEntity
+import com.example.soapshop.data.room.dao.MainDao
+import com.example.soapshop.data.room.entites.UserEntity
 
 
 @Database(entities = [UserEntity::class], version = 1)

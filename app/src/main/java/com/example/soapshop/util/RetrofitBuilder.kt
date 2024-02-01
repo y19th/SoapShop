@@ -3,7 +3,7 @@ package com.example.soapshop.util
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-internal const val BASE_URL = "https://run.mocky.io"
+const val BASE_URL = "https://run.mocky.io"
 
 class RetrofitBuilder {
     private val retrofitBuilder = Retrofit.Builder()

@@ -1,4 +1,4 @@
-package com.example.soapshop.room.entites
+package com.example.soapshop.data.room.entites
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

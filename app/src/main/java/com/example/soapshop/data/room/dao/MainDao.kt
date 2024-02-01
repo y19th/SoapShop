@@ -1,10 +1,10 @@
-package com.example.soapshop.room.dao
+package com.example.soapshop.data.room.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.soapshop.room.entites.UserEntity
+import com.example.soapshop.data.room.entites.UserEntity
 
 @Dao
 interface MainDao {

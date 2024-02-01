@@ -1,8 +1,8 @@
 package com.example.soapshop.data.repository
 
 import com.example.soapshop.domain.models.registration.UserModel
-import com.example.soapshop.room.dao.MainDao
-import com.example.soapshop.room.entites.UserEntity
+import com.example.soapshop.data.room.dao.MainDao
+import com.example.soapshop.data.room.entites.UserEntity
 import javax.inject.Inject
 
 class RoomRepository @Inject constructor(

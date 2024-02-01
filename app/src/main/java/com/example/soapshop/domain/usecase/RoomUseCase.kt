@@ -1,7 +1,7 @@
 package com.example.soapshop.domain.usecase
 
 import com.example.soapshop.data.repository.RoomRepository
-import com.example.soapshop.room.entites.UserEntity
+import com.example.soapshop.data.room.entites.UserEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
