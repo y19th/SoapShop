@@ -44,6 +44,16 @@ class ProfileViewModel @Inject constructor(
                     event.navController.navigate(Routes.REGISTRATION.name)
                 }
             }
+            is ProfileEvents.OnFavouriteClick -> {
+                event.navController.navigate(
+                    route = Routes.PROFILE.routeWith("favourites")
+                )
+            }
+            is ProfileEvents.OnFavouritesItemClick -> {
+                event.navController.navigate(
+                    route = Routes.CATALOG.routeWith(event.itemId)
+                )
+            }
         }
     }
 

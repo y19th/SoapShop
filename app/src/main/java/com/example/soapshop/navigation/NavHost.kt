@@ -15,9 +15,11 @@ import com.example.soapshop.navigation.models.Routes
 import com.example.soapshop.presentation.screens.catalog.CatalogScreen
 import com.example.soapshop.presentation.screens.catalog.ProductScreen
 import com.example.soapshop.presentation.screens.main.MainScreen
+import com.example.soapshop.presentation.screens.profile.FavouritesScreen
 import com.example.soapshop.presentation.screens.profile.ProfileScreen
 import com.example.soapshop.presentation.screens.registration.RegistrationScreen
 import com.example.soapshop.presentation.viewmodels.CatalogViewModel
+import com.example.soapshop.presentation.viewmodels.ProfileViewModel
 
 @Composable
 fun NavHostContainer(
@@ -53,13 +55,19 @@ fun NavHostContainer(
 
             }
             composable(route = Routes.PROFILE.name) {
-                ProfileScreen(navController = navHostController)
+                ProfileScreen(
+                    viewModel = hiltViewModel(
+                        viewModelStoreOwner = viewModelStoreOwner,
+                        key = ProfileViewModel.TAG
+                    ),
+                    navController = navHostController
+                )
             }
             composable(route = Routes.REGISTRATION.name) {
                 RegistrationScreen(navController = navHostController)
             }
             composable(
-                route = Routes.CATALOG.routeWithItemId(itemId = "{productId}"),
+                route = Routes.CATALOG.routeWith(string = "{productId}"),
                 arguments = listOf(navArgument("productId") { type = NavType.StringType })
             ) { navBackStackEntry ->
                 ProductScreen(
@@ -69,6 +77,18 @@ fun NavHostContainer(
                     ),
                     navController = navHostController,
                     productId = navBackStackEntry.arguments?.getString("productId") ?: ""
+                )
+            }
+
+            composable(
+                route = Routes.PROFILE.routeWith(string = "favourites")
+            ) {
+                FavouritesScreen(
+                    viewModel = hiltViewModel(
+                        viewModelStoreOwner = viewModelStoreOwner,
+                        key = ProfileViewModel.TAG
+                    ),
+                    navController = navHostController
                 )
             }
         }

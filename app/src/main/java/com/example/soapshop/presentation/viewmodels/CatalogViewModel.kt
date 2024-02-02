@@ -76,7 +76,7 @@ class CatalogViewModel @Inject constructor(
             }
             is CatalogEvents.OnItemClick -> {
                 event.navController.navigate(
-                    route = Routes.CATALOG.routeWithItemId(event.itemId)
+                    route = Routes.CATALOG.routeWith(event.itemId)
                 )
             }
             is CatalogEvents.OnFavourite -> {

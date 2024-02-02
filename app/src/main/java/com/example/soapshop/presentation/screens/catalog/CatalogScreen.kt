@@ -178,7 +178,13 @@ fun CatalogScreen(
                                     navController = navController
                                 ))
                             },
-                            onEvent = viewModel::onEvent
+                            onFavourite = {
+                                viewModel.onEvent(
+                                    CatalogEvents.OnFavourite(
+                                        model = filtered[index]
+                                    )
+                                )
+                            }
                         )
 
                         if(filtered.size > index + 1) {
@@ -192,7 +198,13 @@ fun CatalogScreen(
                                         navController = navController
                                     ))
                                 },
-                                onEvent = viewModel::onEvent
+                                onFavourite = {
+                                    viewModel.onEvent(
+                                        CatalogEvents.OnFavourite(
+                                            model = filtered[index + 1]
+                                        )
+                                    )
+                                }
                             )
                         }
                     }
@@ -210,7 +222,7 @@ fun CatalogItem(
     item: ProductModel,
     isFavourite: Boolean = false,
     onItemClick: (String) -> Unit,
-    onEvent: (CatalogEvents) -> Unit
+    onFavourite: () -> Unit
 ) {
     val images by rememberSaveable(item) {
         mutableStateOf(ProductMap.map[item.id])
@@ -236,6 +248,7 @@ fun CatalogItem(
                 color = MaterialTheme.colorScheme.outline,
                 shape = RoundedCornerShape(8.dp)
             )
+            .clip(RoundedCornerShape(8.dp))
             .clickable {
                 onItemClick.invoke(item.id)
             }
@@ -372,7 +385,7 @@ fun CatalogItem(
                 .clip(CircleShape)
                 .padding(all = 6.dp)
                 .clickable {
-                    onEvent.invoke(CatalogEvents.OnFavourite(model = item))
+                    onFavourite.invoke()
                 }
         )
     }

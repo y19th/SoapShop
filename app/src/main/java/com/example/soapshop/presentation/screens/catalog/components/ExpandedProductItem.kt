@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -55,7 +56,8 @@ import com.example.soapshop.util.extension.withUnit
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExpandedProductItem(
-    item: ProductModel
+    item: ProductModel,
+    isFavourite: Boolean = false
 ) {
     val images by rememberSaveable(item) {
         mutableStateOf(ProductMap.map[item.id])
@@ -74,6 +76,14 @@ fun ExpandedProductItem(
     }
     var ingredientVisible by rememberSaveable {
         mutableStateOf(!isOverflowed)
+    }
+
+    val heart by rememberSaveable(isFavourite) {
+        if(isFavourite) {
+            mutableIntStateOf(R.drawable.ic_filled_heart)
+        } else {
+            mutableIntStateOf(R.drawable.ic_catalog_heart)
+        }
     }
 
 
@@ -140,7 +150,7 @@ fun ExpandedProductItem(
                 }
             }
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_catalog_heart),
+                imageVector = ImageVector.vectorResource(id = heart),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier

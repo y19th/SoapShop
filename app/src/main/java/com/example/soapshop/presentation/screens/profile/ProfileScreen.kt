@@ -106,7 +106,7 @@ fun ProfileScreen(
                     state.favourites.size
                 ),
                 onClick = {
-                    /*TODO*/
+                    viewModel.onEvent(ProfileEvents.OnFavouriteClick(navController))
                 }
             )
             ProfileItem(
