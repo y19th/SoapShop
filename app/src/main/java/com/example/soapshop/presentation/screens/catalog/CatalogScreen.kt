@@ -78,6 +78,7 @@ fun CatalogScreen(
 
     val state by viewModel.state.collectAsState()
 
+
     val filtered by rememberSaveable(state.selectedPin,state.products) {
         mutableStateOf(
             with(state) {
@@ -170,24 +171,28 @@ fun CatalogScreen(
                         CatalogItem(
                             modifier = Modifier.weight(0.5f),
                             item = filtered[index],
+                            isFavourite = state.favourites.contains(filtered[index].id),
                             onItemClick = {
                                 viewModel.onEvent(CatalogEvents.OnItemClick(
                                     itemId = filtered[index].id,
                                     navController = navController
                                 ))
-                            }
+                            },
+                            onEvent = viewModel::onEvent
                         )
 
                         if(filtered.size > index + 1) {
                             CatalogItem(
                                 modifier = Modifier.weight(0.5f),
                                 item = filtered[index + 1],
+                                isFavourite = state.favourites.contains(filtered[index + 1].id),
                                 onItemClick = {
                                     viewModel.onEvent(CatalogEvents.OnItemClick(
                                         itemId = filtered[index + 1].id,
                                         navController = navController
                                     ))
-                                }
+                                },
+                                onEvent = viewModel::onEvent
                             )
                         }
                     }
@@ -203,12 +208,20 @@ fun CatalogScreen(
 fun CatalogItem(
     modifier: Modifier = Modifier,
     item: ProductModel,
-    onItemClick: (String) -> Unit
+    isFavourite: Boolean = false,
+    onItemClick: (String) -> Unit,
+    onEvent: (CatalogEvents) -> Unit
 ) {
     val images by rememberSaveable(item) {
         mutableStateOf(ProductMap.map[item.id])
     }
-
+    val heart by rememberSaveable(isFavourite) {
+        if(isFavourite) {
+            mutableIntStateOf(R.drawable.ic_filled_heart)
+        } else {
+            mutableIntStateOf(R.drawable.ic_catalog_heart)
+        }
+    }
 
     val pagerState = rememberPagerState(
         pageCount = {
@@ -351,7 +364,7 @@ fun CatalogItem(
 
         }
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_catalog_heart),
+            imageVector = ImageVector.vectorResource(id = heart),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
@@ -359,7 +372,7 @@ fun CatalogItem(
                 .clip(CircleShape)
                 .padding(all = 6.dp)
                 .clickable {
-                    /*TODO*/
+                    onEvent.invoke(CatalogEvents.OnFavourite(model = item))
                 }
         )
     }

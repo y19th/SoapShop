@@ -29,7 +29,7 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             _state.update {
                 it.copy(
-                    user = roomUseCase.receiveUsers().first()
+                    user = roomUseCase.receiveUsers().first(),
                 )
             }
         }
@@ -44,6 +44,12 @@ class ProfileViewModel @Inject constructor(
                     event.navController.navigate(Routes.REGISTRATION.name)
                 }
             }
+        }
+    }
+
+    fun refreshFavourites() {
+        viewModelScope.launch {
+            _state.update { it.copy(favourites = roomUseCase.receiveProducts()) }
         }
     }
 }

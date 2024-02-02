@@ -7,7 +7,7 @@ import androidx.room.Query
 import com.example.soapshop.data.room.entites.UserEntity
 
 @Dao
-interface MainDao {
+interface UserDao {
 
     @Query("select * from users")
     fun receiveUsers() : List<UserEntity>
@@ -17,4 +17,8 @@ interface MainDao {
 
     @Delete
     fun deleteUser(userEntity: UserEntity)
+
+    @Query("delete from users")
+    fun eraseUsers()
+
 }

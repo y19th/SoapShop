@@ -6,12 +6,14 @@ import com.example.soapshop.domain.models.catalog.CatalogFilter
 import com.example.soapshop.domain.models.catalog.CatalogPinModel
 import com.example.soapshop.domain.models.catalog.ProductModel
 
-@Immutable
+@Stable
 data class CatalogState(
     val filter: CatalogFilter = CatalogFilter.Popular,
 
     val pinList: List<CatalogPinModel> = listOf(),
     val selectedPin: CatalogPinModel = CatalogPinModel.Default,
 
-    val products: List<ProductModel> = listOf()
+    val products: List<ProductModel> = listOf(),
+
+    val favourites: List<String> = listOf()
 )

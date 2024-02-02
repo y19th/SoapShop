@@ -10,6 +10,7 @@ import com.example.soapshop.domain.models.catalog.CatalogPinModel
 import com.example.soapshop.domain.models.catalog.CatalogTag
 import com.example.soapshop.domain.states.CatalogState
 import com.example.soapshop.domain.usecase.CatalogUseCase
+import com.example.soapshop.domain.usecase.RoomUseCase
 import com.example.soapshop.navigation.models.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CatalogViewModel @Inject constructor(
-    catalogUseCase: CatalogUseCase
+    catalogUseCase: CatalogUseCase,
+    private val roomUseCase: RoomUseCase
 ): ViewModel(){
 
     companion object {
@@ -47,7 +49,8 @@ class CatalogViewModel @Inject constructor(
             if(response != null) {
                 _state.update {
                     it.copy(
-                        products = response.items.map { response -> response.toProductModel() }
+                        products = response.items.map { response -> response.toProductModel() },
+                        favourites = roomUseCase.receiveProductsId()
                     )
                 }
             }
@@ -74,6 +77,38 @@ class CatalogViewModel @Inject constructor(
             is CatalogEvents.OnItemClick -> {
                 event.navController.navigate(
                     route = Routes.CATALOG.routeWithItemId(event.itemId)
+                )
+            }
+            is CatalogEvents.OnFavourite -> {
+                if(state.value.favourites.contains(event.model.id)) {
+                    viewModelScope.launch {
+                        roomUseCase.deleteProduct(model = event.model)
+                    }.invokeOnCompletion {
+                        updateFavourites(
+                            delete = true,
+                            id = event.model.id
+                        )
+                    }
+                } else {
+                    viewModelScope.launch {
+                        roomUseCase.insertProduct(model = event.model)
+                    }.invokeOnCompletion {
+                        updateFavourites(
+                            delete = false,
+                            id = event.model.id
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+
+    private fun updateFavourites(delete: Boolean, id: String) {
+        _state.update {
+            with(state.value.favourites) {
+                it.copy(
+                    favourites = if(delete) this.minus(id) else this.plus(id)
                 )
             }
         }

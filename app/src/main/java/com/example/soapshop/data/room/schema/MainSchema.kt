@@ -4,14 +4,26 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.soapshop.data.room.dao.MainDao
+import androidx.room.TypeConverters
+import com.example.soapshop.data.room.converters.Converters
+import com.example.soapshop.data.room.dao.ProductDao
+import com.example.soapshop.data.room.dao.UserDao
+import com.example.soapshop.data.room.entites.FeedbackEntity
+import com.example.soapshop.data.room.entites.PriceEntity
+import com.example.soapshop.data.room.entites.ProductEntity
 import com.example.soapshop.data.room.entites.UserEntity
 
 
-@Database(entities = [UserEntity::class], version = 1)
+@Database(
+    entities = [UserEntity::class, ProductEntity::class, PriceEntity::class, FeedbackEntity::class],
+    version = 1
+)
+@TypeConverters(Converters::class)
 abstract class MainSchema: RoomDatabase() {
 
-    abstract fun mainDao(): MainDao
+    abstract fun userDao(): UserDao
+
+    abstract fun productDao(): ProductDao
 
     companion object {
         @Volatile
