@@ -72,7 +72,7 @@ class RegistrationViewModel @Inject constructor(
                                 id = 0,
                                 name = name,
                                 surname = surname,
-                                phone = phone
+                                phone = phone.replaceRange(0,0,"7")
                             )
                         )
                         event.navController.navigate(Routes.CATALOG.name)

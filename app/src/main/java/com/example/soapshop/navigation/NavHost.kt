@@ -15,6 +15,7 @@ import com.example.soapshop.navigation.models.Routes
 import com.example.soapshop.presentation.screens.catalog.CatalogScreen
 import com.example.soapshop.presentation.screens.catalog.ProductScreen
 import com.example.soapshop.presentation.screens.main.MainScreen
+import com.example.soapshop.presentation.screens.profile.ProfileScreen
 import com.example.soapshop.presentation.screens.registration.RegistrationScreen
 import com.example.soapshop.presentation.viewmodels.CatalogViewModel
 
@@ -52,7 +53,7 @@ fun NavHostContainer(
 
             }
             composable(route = Routes.PROFILE.name) {
-
+                ProfileScreen(navController = navHostController)
             }
             composable(route = Routes.REGISTRATION.name) {
                 RegistrationScreen(navController = navHostController)

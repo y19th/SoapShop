@@ -36,10 +36,25 @@
         <item quantity="many">%d отзывов</item>
         <item quantity="other">%d отзывов</item>
     </plurals>
+    <plurals name="products">
+        <item quantity="zero">Нет товаров</item>
+        <item quantity="one">%d товар</item>
+        <item quantity="two">%d товара</item>
+        <item quantity="few">%d товара</item>
+        <item quantity="many">%d товаров</item>
+        <item quantity="other">%d товаров</item>
+    </plurals>
     <string name="product_section_desc">Описание</string>
     <string name="product_section_attr">Характеристики</string>
     <string name="product_section_ingr">Состав</string>
     <string name="hide_button">Скрыть</string>
     <string name="additional_button">Подробнее</string>
     <string name="add_to_cart">Добавить корзину</string>
+    <string name="profile_title">Личный кабинет</string>
+    <string name="profile_favoutites_title">Избранное</string>
+    <string name="profile_shops">Магазины</string>
+    <string name="profile_feedback">Обратная связь</string>
+    <string name="profile_offer">Оферта</string>
+    <string name="profile_products_back">Возврат товара</string>
+    <string name="profile_exit">Выйти</string>
 </resources>

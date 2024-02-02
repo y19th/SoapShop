@@ -45,7 +45,7 @@ fun MainBottomBar(
             val destinations = rememberBottomBarDestinations()
             destinations.forEach { destination ->
                 val isSelected = destinationHierarchy?.any {
-                    it.route == destination.route.name
+                    it.route?.contains(destination.route.name) ?: false
                 } == true
 
                 BottomNavigationItem(

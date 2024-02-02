@@ -18,4 +18,8 @@ class RoomUseCase @Inject constructor(
     suspend fun insertUsers(userEntity: UserEntity) = withContext(defaultDispatcher) {
         repository.insertUsers(userEntity)
     }
+
+    suspend fun eraseUsers() = withContext(defaultDispatcher) {
+        repository.eraseUsers()
+    }
 }
