@@ -61,8 +61,7 @@ class CatalogViewModel @Inject constructor(
             val response = catalogUseCase.receiveProducts()
             _state.update {
                 it.copy(
-                    products = response.map { response -> response.toProductModel() },
-                    favourites = roomUseCase.receiveProductsId()
+                    products = response.map { response -> response.toProductModel() }
                 )
             }
         }
@@ -120,6 +119,16 @@ class CatalogViewModel @Inject constructor(
             with(state.value.favourites) {
                 it.copy(
                     favourites = if(delete) this.minus(id) else this.plus(id)
+                )
+            }
+        }
+    }
+
+    fun refreshData() {
+        viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    favourites = roomUseCase.receiveProductsId()
                 )
             }
         }

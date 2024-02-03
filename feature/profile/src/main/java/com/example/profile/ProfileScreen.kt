@@ -1,41 +1,30 @@
 package com.example.profile
 
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.ui.R
-import com.example.domain.events.ProfileEvents
 import com.example.components.FilledButton
-import com.example.components.HorizontalSpacer
 import com.example.components.VerticalSpacer
+import com.example.domain.events.ProfileEvents
+import com.example.profile.components.ProfileIcon
+import com.example.profile.components.ProfileItem
+import com.example.ui.R
 import com.example.ui.theme.Black
 import com.example.ui.theme.DarkGreyDarker
 import com.example.ui.theme.Grey
@@ -43,7 +32,6 @@ import com.example.ui.theme.LightGrey
 import com.example.ui.theme.MainTypography
 import com.example.ui.theme.Orange
 import com.example.ui.theme.Pink
-import com.example.util.extension.padding
 import com.example.util.extension.withPhoneMask
 
 @Composable
@@ -54,8 +42,8 @@ fun ProfileScreen(
 
     val state by viewModel.state.collectAsState()
 
-    SideEffect {
-        viewModel.refreshFavourites()
+    LaunchedEffect(null) {
+        viewModel.refreshData()
     }
 
     Column(
@@ -163,64 +151,4 @@ fun ProfileScreen(
     }
 }
 
-@Composable
-fun ProfileItem(
-    modifier: Modifier = Modifier,
-    leadingIcon: ProfileIcon,
-    trailingIcon: ProfileIcon = ProfileIcon(res = R.drawable.ic_arrow_next, tint = Black),
-    titleText: String = "",
-    additionalText: String? = null,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = LightGrey,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .clip(RoundedCornerShape(8.dp))
-            .clickable { onClick.invoke() }
-            .padding(horizontal = 8.dp, top = 8.dp, bottom = 9.dp)
-            .then(modifier),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = leadingIcon.res),
-            contentDescription = null,
-            tint = leadingIcon.tint
-        )
 
-        HorizontalSpacer(width = 16.dp)
-
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            Text(
-                text = titleText,
-                style = MainTypography.titleMedium,
-                color = Black
-            )
-            if(!additionalText.isNullOrEmpty()) {
-                Text(
-                    text = additionalText,
-                    style = MainTypography.caption,
-                    color = Grey
-                )
-            }
-        }
-
-        Icon(
-            imageVector = ImageVector.vectorResource(id = trailingIcon.res),
-            contentDescription = null,
-            tint = trailingIcon.tint
-        )
-    }
-}
-
-@Immutable
-data class ProfileIcon(
-    @DrawableRes val res: Int,
-    val tint: Color
-)

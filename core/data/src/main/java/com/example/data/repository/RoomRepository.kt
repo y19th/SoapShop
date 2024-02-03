@@ -33,6 +33,14 @@ class RoomRepository @Inject constructor(
         return productDao.receiveProducts()
     }
 
+    fun eraseProducts() {
+        productDao.apply {
+            eraseProducts()
+            eraseFeedbacks()
+            erasePrices()
+        }
+    }
+
     fun deleteProduct(
         productEntity: ProductEntity,
         priceEntity: PriceEntity,

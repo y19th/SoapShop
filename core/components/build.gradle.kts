@@ -11,7 +11,6 @@ android {
         minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -45,9 +44,6 @@ dependencies {
 
     implementation(project(":core:ui"))
     implementation(project(":core:util"))
-    implementation(project(":core:domain"))
-
-
 
     //navigation
     implementation("androidx.navigation:navigation-compose:$navigationVersion")

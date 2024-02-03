@@ -18,7 +18,7 @@ import com.example.ui.theme.MainTypography
 
 @Stable
 @Composable
-fun ProductSection(
+internal fun ProductSection(
     modifier: Modifier = Modifier,
     title: String = "",
     trailingIcon: @Composable RowScope.() -> Unit = {},

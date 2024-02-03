@@ -1,5 +1,6 @@
 package com.example.soapshop
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -64,6 +65,8 @@ fun NavHostContainer(
                 )
             }
             composable(route = Routes.REGISTRATION.name) {
+
+                BackHandler(true) {}
                 RegistrationScreen(navController = navHostController)
             }
             composable(

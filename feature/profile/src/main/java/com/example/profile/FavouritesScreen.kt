@@ -25,11 +25,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.catalog.components.CatalogItem
 import com.example.ui.R
 import com.example.domain.events.ProfileEvents
 import com.example.components.HorizontalSpacer
 import com.example.components.VerticalSpacer
-import com.example.catalog.CatalogItem
 import com.example.profile.viewmodels.ProfileViewModel
 
 @Composable
@@ -41,7 +41,7 @@ fun FavouritesScreen(
     val state by viewModel.state.collectAsState()
 
     val rowCount by rememberSaveable(state.favourites) {
-        if(state.favourites.size % 2 == 0) {
+        if (state.favourites.size % 2 == 0) {
             mutableIntStateOf(state.favourites.size / 2)
         } else {
             mutableIntStateOf(state.favourites.size / 2 + 1)
@@ -54,9 +54,9 @@ fun FavouritesScreen(
             .padding(top = 16.dp, start = 16.dp, end = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth()
-        ){
+        ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_catalog_arrow_back),
                 contentDescription = null,
@@ -80,21 +80,39 @@ fun FavouritesScreen(
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(7.dp)
         ) {
-                items(rowCount) {
-                    val index = it * 2
-                    Row(
-                        modifier = Modifier.fillMaxHeight(0.1f),
-                        horizontalArrangement = Arrangement.spacedBy(7.dp)
-                    ) {
+            items(rowCount) {
+                val index = it * 2
+                Row(
+                    modifier = Modifier.fillMaxHeight(0.1f),
+                    horizontalArrangement = Arrangement.spacedBy(7.dp)
+                ) {
+                    CatalogItem(
+                        modifier = Modifier.weight(0.5f),
+                        item = state.favourites[index],
+                        isFavourite = true,
+                        onItemClick = {
+                            viewModel.onEvent(
+                                ProfileEvents.OnFavouritesItemClick(
+                                    navController = navController,
+                                    itemId = state.favourites[index].id
+                                )
+                            )
+                        },
+                        onFavourite = {
+
+                        }
+                    )
+
+                    if (state.favourites.size > index + 1) {
                         CatalogItem(
                             modifier = Modifier.weight(0.5f),
-                            item = state.favourites[index],
+                            item = state.favourites[index + 1],
                             isFavourite = true,
                             onItemClick = {
                                 viewModel.onEvent(
                                     ProfileEvents.OnFavouritesItemClick(
                                         navController = navController,
-                                        itemId = state.favourites[index].id
+                                        itemId = state.favourites[index + 1].id
                                     )
                                 )
                             },
@@ -102,26 +120,8 @@ fun FavouritesScreen(
 
                             }
                         )
-
-                        if(state.favourites.size > index + 1) {
-                            CatalogItem(
-                                modifier = Modifier.weight(0.5f),
-                                item = state.favourites[index + 1],
-                                isFavourite = true,
-                                onItemClick = {
-                                    viewModel.onEvent(
-                                        ProfileEvents.OnFavouritesItemClick(
-                                            navController = navController,
-                                            itemId = state.favourites[index + 1].id
-                                        )
-                                    )
-                                },
-                                onFavourite = {
-
-                                }
-                            )
-                        }
                     }
+                }
             }
         }
     }

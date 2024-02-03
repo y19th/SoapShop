@@ -16,7 +16,7 @@ import com.example.ui.theme.LightGrey
 import com.example.ui.theme.MainTypography
 
 @Composable
-fun InfoSection(
+internal fun InfoSection(
     item: InfoModel
 ) {
     Row (

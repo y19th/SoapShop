@@ -25,23 +25,14 @@ class ProfileViewModel @Inject constructor(
     private val _state = MutableStateFlow(ProfileState())
     val state = _state.asStateFlow()
 
-    init {
-        viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    user = roomUseCase.receiveUsers().first(),
-                )
-            }
-        }
-    }
-
     fun onEvent(event: ProfileEvents) {
         when(event) {
             is ProfileEvents.OnUserExit -> {
                 viewModelScope.launch {
-                    roomUseCase.eraseUsers()
+                    roomUseCase.eraseDatabase()
                 }.invokeOnCompletion {
                     event.navController.navigate(Routes.REGISTRATION.name)
+
                 }
             }
             is ProfileEvents.OnFavouriteClick -> {
@@ -57,9 +48,14 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun refreshFavourites() {
+    fun refreshData() {
         viewModelScope.launch {
-            _state.update { it.copy(favourites = roomUseCase.receiveProducts()) }
+            _state.update {
+                it.copy(
+                    user = roomUseCase.receiveUsers().first(),
+                    favourites = roomUseCase.receiveProducts()
+                )
+            }
         }
     }
 }

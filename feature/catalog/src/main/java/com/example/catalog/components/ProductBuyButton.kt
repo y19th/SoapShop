@@ -14,13 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.components.CrossedText
 import com.example.ui.R
-import com.example.catalog.CrossedText
 import com.example.ui.theme.LightPink
 import com.example.ui.theme.MainTypography
 
 @Composable
-fun ProductBuyButton(
+internal fun ProductBuyButton(
     modifier: Modifier = Modifier,
     priceModel: com.example.domain.models.catalog.PriceModel,
     onClick: () -> Unit

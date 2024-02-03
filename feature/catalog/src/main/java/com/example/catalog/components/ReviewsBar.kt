@@ -14,7 +14,7 @@ import com.example.ui.theme.Orange
 
 @Stable
 @Composable
-fun ReviewsBar(
+internal fun ReviewsBar(
     reviewMark: Float = 0f
 ) {
     val filledStars by rememberSaveable {

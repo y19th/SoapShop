@@ -22,8 +22,12 @@ class RoomUseCase @Inject constructor(
         repository.insertUsers(userEntity)
     }
 
-    suspend fun eraseUsers() = withContext(defaultDispatcher) {
-        repository.eraseUsers()
+    suspend fun eraseDatabase() = withContext(defaultDispatcher) {
+        repository.apply {
+            eraseUsers()
+            eraseProducts()
+        }
+        return@withContext
     }
 
     suspend fun receiveProductsId() = withContext(defaultDispatcher) {

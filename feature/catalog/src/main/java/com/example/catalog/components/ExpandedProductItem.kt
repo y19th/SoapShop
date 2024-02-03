@@ -37,8 +37,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.components.CrossedText
 import com.example.ui.R
 import com.example.components.VerticalSpacer
+import com.example.domain.models.catalog.ProductModel
 import com.example.ui.theme.Black
 import com.example.ui.theme.DarkGrey
 import com.example.ui.theme.Grey
@@ -48,8 +50,8 @@ import com.example.util.extension.withUnit
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ExpandedProductItem(
-    item: com.example.domain.models.catalog.ProductModel,
+internal fun ExpandedProductItem(
+    item: ProductModel,
     isFavourite: Boolean = false
 ) {
     val images by rememberSaveable(item) {
@@ -234,11 +236,11 @@ fun ExpandedProductItem(
                     style = MainTypography.priceText,
                     color = Black
                 )
-                com.example.catalog.CrossedText(
+                CrossedText(
                     title = item.price.price.withUnit(item.price.unit)
                 )
 
-                com.example.catalog.DiscountText(
+                DiscountText(
                     title = item.price.discount
                 )
             }

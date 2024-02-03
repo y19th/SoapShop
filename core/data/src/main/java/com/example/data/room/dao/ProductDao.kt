@@ -31,6 +31,15 @@ interface ProductDao {
     @Delete
     fun deleteFeedback(feedbackEntity: FeedbackEntity)
 
+    @Query("delete from products")
+    fun eraseProducts()
+
+    @Query("delete from price")
+    fun erasePrices()
+
+    @Query("delete from feedback")
+    fun eraseFeedbacks()
+
 
     @Query("select id from products")
     fun receiveProductsId(): List<String>

@@ -1,34 +1,20 @@
 package com.example.catalog
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -36,39 +22,24 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.catalog.components.CatalogDropDownButton
+import com.example.catalog.components.CatalogItem
+import com.example.catalog.components.CatalogPin
 import com.example.catalog.viewmodels.CatalogViewModel
-import com.example.catalog.viewmodels.ProductMap
-import com.example.domain.events.CatalogEvents
-import com.example.domain.models.catalog.CatalogPinModel
-import com.example.domain.models.catalog.CatalogTag
-import com.example.domain.models.catalog.ProductModel
-import com.example.ui.R
 import com.example.components.HorizontalSpacer
 import com.example.components.VerticalSpacer
-import com.example.ui.theme.Black
-import com.example.ui.theme.DarkBlue
+import com.example.domain.events.CatalogEvents
+import com.example.domain.models.catalog.CatalogTag
+import com.example.ui.R
 import com.example.ui.theme.DarkGrey
-import com.example.ui.theme.Grey
-import com.example.ui.theme.LightGrey
 import com.example.ui.theme.MainTypography
-import com.example.ui.theme.Orange
-import com.example.ui.theme.White
-import com.example.util.extension.withUnit
 
 @Composable
 fun CatalogScreen(
@@ -78,8 +49,12 @@ fun CatalogScreen(
 
     val state by viewModel.state.collectAsState()
 
+    LaunchedEffect(null) {
+        viewModel.refreshData()
+    }
 
-    val filtered by rememberSaveable(state.selectedPin,state.products) {
+
+    val filtered by rememberSaveable(state.selectedPin, state.products) {
         mutableStateOf(
             with(state) {
                 if (selectedPin.tag is CatalogTag.All || selectedPin.tag is CatalogTag.Deleted) {
@@ -93,7 +68,7 @@ fun CatalogScreen(
         )
     }
     val rowCount by rememberSaveable(filtered) {
-        if(filtered.size % 2 == 0) {
+        if (filtered.size % 2 == 0) {
             mutableIntStateOf(filtered.size / 2)
         } else {
             mutableIntStateOf(filtered.size / 2 + 1)
@@ -124,16 +99,16 @@ fun CatalogScreen(
                 title = stringResource(id = state.filter.title),
                 onEvent = viewModel::onEvent
             )
-            Row (
+            Row(
                 verticalAlignment = Alignment.CenterVertically
-            ){
+            ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_catalog_filter),
                     contentDescription = null
                 )
 
                 HorizontalSpacer(width = 4.dp)
-                
+
                 Text(
                     text = stringResource(id = R.string.catalog_filter),
                     style = MainTypography.titleRegular,
@@ -144,11 +119,10 @@ fun CatalogScreen(
         LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp, bottom = 32.dp)
-            ,
+                .padding(top = 16.dp, bottom = 32.dp),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            items(state.pinList) {model ->
+            items(state.pinList) { model ->
                 CatalogPin(
                     pinModel = model,
                     isSelected = model == state.selectedPin,
@@ -159,7 +133,7 @@ fun CatalogScreen(
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(7.dp)
         ) {
-            if(filtered.isNotEmpty()) {
+            if (filtered.isNotEmpty()) {
                 items(rowCount) {
                     val index = it * 2
                     Row(
@@ -173,9 +147,10 @@ fun CatalogScreen(
                             onItemClick = {
                                 viewModel.onEvent(
                                     CatalogEvents.OnItemClick(
-                                    itemId = filtered[index].id,
-                                    navController = navController
-                                ))
+                                        itemId = filtered[index].id,
+                                        navController = navController
+                                    )
+                                )
                             },
                             onFavourite = {
                                 viewModel.onEvent(
@@ -186,7 +161,7 @@ fun CatalogScreen(
                             }
                         )
 
-                        if(filtered.size > index + 1) {
+                        if (filtered.size > index + 1) {
                             CatalogItem(
                                 modifier = Modifier.weight(0.5f),
                                 item = filtered[index + 1],
@@ -194,9 +169,10 @@ fun CatalogScreen(
                                 onItemClick = {
                                     viewModel.onEvent(
                                         CatalogEvents.OnItemClick(
-                                        itemId = filtered[index + 1].id,
-                                        navController = navController
-                                    ))
+                                            itemId = filtered[index + 1].id,
+                                            navController = navController
+                                        )
+                                    )
                                 },
                                 onFavourite = {
                                     viewModel.onEvent(
@@ -210,275 +186,6 @@ fun CatalogScreen(
                     }
                 }
             }
-        }
-    }
-}
-
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun CatalogItem(
-    modifier: Modifier = Modifier,
-    item: ProductModel,
-    isFavourite: Boolean = false,
-    onItemClick: (String) -> Unit,
-    onFavourite: () -> Unit
-) {
-    val images by rememberSaveable(item) {
-        mutableStateOf(ProductMap.map[item.id])
-    }
-    val heart by rememberSaveable(isFavourite) {
-        if(isFavourite) {
-            mutableIntStateOf(R.drawable.ic_filled_heart)
-        } else {
-            mutableIntStateOf(R.drawable.ic_catalog_heart)
-        }
-    }
-
-    val pagerState = rememberPagerState(
-        pageCount = {
-            images?.size ?: 0
-        }
-    )
-
-    Box(
-        modifier = Modifier
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outline,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .clip(RoundedCornerShape(8.dp))
-            .clickable {
-                onItemClick.invoke(item.id)
-            }
-            .then(modifier)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.TopCenter)
-                .padding(horizontal = 7.dp)
-        ) {
-            HorizontalPager(state = pagerState) {
-                Image(
-                    painter = painterResource(id = images?.get(it) ?: R.drawable.ic_body_lotion),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillWidth
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .wrapContentHeight()
-                    .fillMaxWidth()
-                ,
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.Top
-            ) {
-                repeat(pagerState.pageCount) { iteration ->
-                    val color =
-                        if (pagerState.currentPage == iteration) MaterialTheme.colorScheme.primary
-                        else LightGrey
-
-                    Box(modifier = Modifier
-                        .padding(1.dp)
-                        .clip(CircleShape)
-                        .background(color)
-                        .size(4.dp)
-                    )
-                }
-            }
-            CrossedText(
-                modifier = Modifier.padding(vertical = 3.dp),
-                title = item.price.price.withUnit(item.price.unit)
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = item.price.priceWithDiscount.withUnit(item.price.unit),
-                    style = MainTypography.titleMedium,
-                    color = Black
-                )
-
-                DiscountText(
-                    title = item.price.discount
-                )
-            }
-
-            Text(
-                text = item.title,
-                style = MainTypography.titleSmall,
-                color = Black,
-                modifier = Modifier.padding(vertical = 2.dp)
-            )
-
-            Text(
-                text = item.subtitle,
-                style = MainTypography.caption,
-                color = DarkGrey,
-                modifier = Modifier.heightIn(
-                    min = 40.dp
-                )
-            )
-
-            VerticalSpacer(height = 4.dp)
-
-            Row(
-                modifier = Modifier
-                    .wrapContentSize()
-                    .offset(x = (-3).dp)
-                ,
-                horizontalArrangement = Arrangement.spacedBy(2.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_catalog_star),
-                    contentDescription = null,
-                    tint = Orange
-                )
-                Text(
-                    text = item.feedback.rating.toString(),
-                    style = MainTypography.elementText,
-                    color = Orange
-                )
-                Text(
-                    text = "(${item.feedback.count})",
-                    style = MainTypography.elementText,
-                    color = Grey
-                )
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset(x = 7.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_catalog_add),
-                    contentDescription = null,
-                    tint = White,
-                    modifier = Modifier
-                        .background(
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = RoundedCornerShape(topStart = 8.dp, bottomEnd = 8.dp)
-                        )
-                        .padding(all = 4.dp)
-                        .clip(RoundedCornerShape(topStart = 8.dp, bottomEnd = 8.dp))
-                        .clickable {
-                            /*TODO*/
-                        }
-                )
-            }
-
-        }
-        Icon(
-            imageVector = ImageVector.vectorResource(id = heart),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .clip(CircleShape)
-                .padding(all = 6.dp)
-                .clickable {
-                    onFavourite.invoke()
-                }
-        )
-    }
-}
-
-
-@Composable
-fun CrossedText(
-    modifier: Modifier = Modifier,
-    title: String,
-    contentColor: Color = Grey,
-    textStyle: TextStyle = MainTypography.elementText
-) {
-    Text(
-        text = title,
-        style = textStyle,
-        color = contentColor,
-        modifier = Modifier
-            .drawWithContent {
-                drawContent()
-                drawLine(
-                    color = contentColor,
-                    strokeWidth = 2.dp.value,
-                    start = Offset(x = 0f, y = this.size.height * 0.75f),
-                    end = Offset(x = this.size.width, y = this.size.height * 0.25f)
-                )
-            }
-            .then(modifier)
-    )
-}
-
-@Composable
-fun DiscountText(
-    title: String = ""
-) {
-    Text(
-        text = "-$title%",
-        style = MainTypography.elementText,
-        color = White,
-        modifier = Modifier
-            .padding(vertical = 1.dp)
-
-            .background(
-                color = MaterialTheme.colorScheme.primary,
-                shape = RoundedCornerShape(4.dp)
-            )
-            .padding(vertical = 3.dp, horizontal = 6.dp)
-    )
-}
-
-@Composable
-fun CatalogPin(
-    pinModel: CatalogPinModel,
-    isSelected: Boolean = false,
-    onEvent: (CatalogEvents) -> Unit
-) {
-    Row(
-       modifier = Modifier
-           .background(
-               color = if (isSelected) DarkBlue else LightGrey,
-               shape = CircleShape
-           )
-           .clip(CircleShape)
-           .clickable {
-               onEvent.invoke(CatalogEvents.OnPinSelected(newValue = pinModel))
-           }
-
-    ){
-        Text(
-            text = pinModel.title,
-            style = MainTypography.titleRegular,
-            color = if(isSelected) White else Grey,
-            modifier = Modifier.padding(
-                top = 4.dp,
-                bottom = 4.dp,
-                start = 12.dp,
-                end = if(isSelected) 0.dp else 12.dp
-            )
-        )
-        if(isSelected) {
-            HorizontalSpacer(width = 4.dp)
-
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_pin_cancel),
-                contentDescription = null,
-                tint = White,
-                modifier = Modifier
-                    .padding(top = 4.dp, bottom = 4.dp, end = 8.dp)
-                    .clip(CircleShape)
-                    .clickable {
-                        onEvent.invoke(CatalogEvents.OnPinCancel)
-                    }
-            )
         }
     }
 }

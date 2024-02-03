@@ -32,7 +32,7 @@ import com.example.ui.theme.MainTypography
 
 
 @Composable
-fun CatalogDropDownButton(
+internal fun CatalogDropDownButton(
     modifier: Modifier = Modifier,
     title: String = "",
     onEvent: (CatalogEvents) -> Unit

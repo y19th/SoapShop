@@ -24,7 +24,7 @@ import com.example.ui.theme.MainTypography
 
 @Stable
 @Composable
-fun ContainerText(
+internal fun ContainerText(
     modifier: Modifier = Modifier,
     text: String = ""
 ) {
