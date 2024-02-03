@@ -1,10 +1,16 @@
 package com.example.domain.models.nav
 
+import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Immutable
 import com.example.domain.R
+import kotlinx.parcelize.Parcelize
 
-sealed class Destinations(@StringRes val label: Int,@DrawableRes val icon: Int, val route: Routes) {
+@Immutable
+@Parcelize
+sealed class Destinations(@StringRes val label: Int,@DrawableRes val icon: Int, val route: Routes) :
+    Parcelable {
     data object MainDestination: Destinations(
         label = R.string.bar_main,
         icon = R.drawable.ic_bottom_bar_main,

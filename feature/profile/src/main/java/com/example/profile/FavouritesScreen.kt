@@ -28,20 +28,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.catalog.components.CatalogItem
 import com.example.components.HorizontalSpacer
 import com.example.domain.events.ProfileEvents
+import com.example.profile.components.PageColumn
 import com.example.profile.viewmodels.ProfileViewModel
 import com.example.ui.R
 import com.example.ui.theme.Black
-import com.example.ui.theme.Grey
 import com.example.ui.theme.LightGrey
 import com.example.ui.theme.MainTypography
-import com.example.ui.theme.White
 
 @Composable
 fun FavouritesScreen(
@@ -183,32 +181,6 @@ fun FavouritesScreen(
         }
     }
 }
-
-@Composable
-internal fun PageColumn(
-    modifier: Modifier = Modifier,
-    isSelected: Boolean = false,
-    text: String = "",
-    onClick: () -> Unit
-) {
-    Text(
-        text = text,
-        style = if(isSelected)MainTypography.buttonMedium else MainTypography.titleRegular,
-        color = if(isSelected) Black else Grey,
-        modifier = modifier
-            .background(
-                color = if (isSelected) White else LightGrey,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .clickable {
-                onClick.invoke()
-            }
-            .padding(vertical = 9.dp)
-            .clip(RoundedCornerShape(8.dp)),
-        textAlign = TextAlign.Center
-    )
-}
-
 
 @Immutable
 enum class FavouriteColumn {

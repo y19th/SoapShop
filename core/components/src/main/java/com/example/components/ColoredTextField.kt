@@ -57,6 +57,7 @@ fun ColoredTextField(
                 .then(modifier),
             value = value,
             onValueChange = onValueChange,
+            enabled = isEnabled,
             textStyle = MainTypography.placeHolderText,
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
         ) { innerTextField ->

@@ -32,8 +32,8 @@ internal fun ProductBuyButton(
                 color = com.example.ui.theme.Pink,
                 shape = RoundedCornerShape(8.dp)
             )
-            .padding(horizontal = 16.dp, vertical = 17.dp)
             .clickable { onClick.invoke() }
+            .padding(horizontal = 16.dp, vertical = 17.dp)
             .clip(RoundedCornerShape(8.dp))
             .then(modifier)
         ,
