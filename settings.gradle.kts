@@ -15,4 +15,12 @@ dependencyResolutionManagement {
 
 rootProject.name = "SoapShop"
 include(":app")
- 
+include(":feature:registration")
+include(":core:ui")
+include(":core:components")
+include(":core:util")
+include(":core:data")
+include(":core:domain")
+include(":feature:catalog")
+include(":feature:profile")
+include(":feature:main")

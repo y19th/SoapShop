@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bar_main">Главная</string>
+    <string name="bar_catalog">Каталог</string>
+    <string name="bar_cart">Корзина</string>
+    <string name="bar_discounts">Акции</string>
+    <string name="bar_profile">Профиль</string>
+    <string name="filter_popular">По популярности</string>
+    <string name="filter_priceRise">По возрастанию цены</string>
+    <string name="filter_priceDown">По уменьшению цены</string>
+</resources>

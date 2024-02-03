@@ -58,6 +58,15 @@ dependencies {
     val retrofitVersion = "2.9.0"
 
 
+    implementation(project(":core:ui"))
+    implementation(project(":core:data"))
+    implementation(project(":core:domain"))
+    implementation(project(":core:util"))
+
+    implementation(project(":feature:registration"))
+    implementation(project(":feature:profile"))
+    implementation(project(":feature:catalog"))
+    implementation(project(":feature:main"))
 
     //navigation
     implementation("androidx.navigation:navigation-compose:$navigationVersion")
@@ -71,15 +80,6 @@ dependencies {
     implementation ("com.google.dagger:hilt-android:$daggerVersion")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     ksp ("com.google.dagger:hilt-compiler:$daggerVersion")
-
-    //room
-    implementation ("androidx.room:room-runtime:$roomVersion")
-    implementation ("androidx.room:room-ktx:$roomVersion")
-    ksp("androidx.room:room-compiler:$roomVersion")
-
-    // retrofit
-    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
-    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
 
 
     implementation("androidx.core:core-ktx:1.12.0")
