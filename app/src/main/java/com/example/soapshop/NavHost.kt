@@ -41,6 +41,9 @@ fun NavHostContainer(
                 MainScreen()
             }
             composable(route = Routes.CATALOG.name) {
+
+                BackHandler(true) {}
+
                 CatalogScreen(
                     viewModel = hiltViewModel(
                         viewModelStoreOwner = viewModelStoreOwner,
@@ -73,6 +76,7 @@ fun NavHostContainer(
                 route = Routes.CATALOG.routeWith(string = "{productId}"),
                 arguments = listOf(navArgument("productId") { type = NavType.StringType })
             ) { navBackStackEntry ->
+
                 ProductScreen(
                     viewModel = hiltViewModel(
                         viewModelStoreOwner = viewModelStoreOwner,

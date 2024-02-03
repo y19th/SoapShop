@@ -52,7 +52,8 @@ import com.example.util.extension.withUnit
 @Composable
 internal fun ExpandedProductItem(
     item: ProductModel,
-    isFavourite: Boolean = false
+    isFavourite: Boolean = false,
+    onFavourite: () -> Unit
 ) {
     val images by rememberSaveable(item) {
         mutableStateOf(com.example.catalog.viewmodels.ProductMap.map[item.id])
@@ -153,7 +154,7 @@ internal fun ExpandedProductItem(
                     .clip(CircleShape)
                     .padding(end = 2.dp)
                     .clickable {
-                        /*TODO*/
+                        onFavourite.invoke()
                     }
             )
         }

@@ -1,36 +1,47 @@
 package com.example.profile
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.catalog.components.CatalogItem
-import com.example.ui.R
-import com.example.domain.events.ProfileEvents
 import com.example.components.HorizontalSpacer
-import com.example.components.VerticalSpacer
+import com.example.domain.events.ProfileEvents
 import com.example.profile.viewmodels.ProfileViewModel
+import com.example.ui.R
+import com.example.ui.theme.Black
+import com.example.ui.theme.Grey
+import com.example.ui.theme.LightGrey
+import com.example.ui.theme.MainTypography
+import com.example.ui.theme.White
 
 @Composable
 fun FavouritesScreen(
@@ -48,6 +59,12 @@ fun FavouritesScreen(
         }
     }
 
+    var selectedItem by rememberSaveable {
+        mutableStateOf(FavouriteColumn.PRODUCTS)
+    }
+
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,69 +77,140 @@ fun FavouritesScreen(
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_catalog_arrow_back),
                 contentDescription = null,
-                tint = com.example.ui.theme.Black,
-                modifier = Modifier.clickable {
-                    navController.navigateUp()
-                }
+                tint = Black,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .clickable {
+                        navController.navigateUp()
+                    }
             )
 
             HorizontalSpacer(width = 28.dp)
 
             Text(
                 text = stringResource(id = R.string.profile_favoutites_title),
-                style = com.example.ui.theme.MainTypography.titleLarge,
+                style = MainTypography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
 
-        VerticalSpacer(height = 62.dp)
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 6.dp)
+                .background(
+                    color = LightGrey,
+                    shape = RoundedCornerShape(10.dp)
+                )
+                .padding(all = 2.dp)
+        ){
+            PageColumn(
+                modifier = Modifier.weight(0.5f),
+                text = stringResource(id = R.string.profile_products),
+                isSelected = selectedItem == FavouriteColumn.PRODUCTS,
+                onClick = {
+                    selectedItem = FavouriteColumn.PRODUCTS
+                }
+            )
+            PageColumn(
+                modifier = Modifier.weight(0.5f),
+                text = stringResource(id = R.string.profile_brands),
+                isSelected = selectedItem == FavouriteColumn.BRANDS,
+                onClick = {
+                    selectedItem = FavouriteColumn.BRANDS
+                }
+            )
+        }
 
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(7.dp)
-        ) {
-            items(rowCount) {
-                val index = it * 2
-                Row(
-                    modifier = Modifier.fillMaxHeight(0.1f),
-                    horizontalArrangement = Arrangement.spacedBy(7.dp)
+        when (selectedItem) {
+            FavouriteColumn.PRODUCTS -> {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(7.dp)
                 ) {
-                    CatalogItem(
-                        modifier = Modifier.weight(0.5f),
-                        item = state.favourites[index],
-                        isFavourite = true,
-                        onItemClick = {
-                            viewModel.onEvent(
-                                ProfileEvents.OnFavouritesItemClick(
-                                    navController = navController,
-                                    itemId = state.favourites[index].id
-                                )
-                            )
-                        },
-                        onFavourite = {
+                    items(rowCount) {
+                        val index = it * 2
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(7.dp)
+                        ) {
 
-                        }
-                    )
+                            val modifier = if (state.favourites.size > index + 1) {
+                                Modifier.weight(0.5f)
+                            } else Modifier.fillMaxWidth(0.5f)
 
-                    if (state.favourites.size > index + 1) {
-                        CatalogItem(
-                            modifier = Modifier.weight(0.5f),
-                            item = state.favourites[index + 1],
-                            isFavourite = true,
-                            onItemClick = {
-                                viewModel.onEvent(
-                                    ProfileEvents.OnFavouritesItemClick(
-                                        navController = navController,
-                                        itemId = state.favourites[index + 1].id
+                            CatalogItem(
+                                modifier = modifier,
+                                item = state.favourites[index],
+                                isFavourite = true,
+                                onItemClick = {
+                                    viewModel.onEvent(
+                                        ProfileEvents.OnFavouritesItemClick(
+                                            navController = navController,
+                                            itemId = state.favourites[index].id
+                                        )
                                     )
-                                )
-                            },
-                            onFavourite = {
+                                },
+                                onFavourite = {
 
+                                }
+                            )
+
+                            if (state.favourites.size > index + 1) {
+                                CatalogItem(
+                                    modifier = modifier,
+                                    item = state.favourites[index + 1],
+                                    isFavourite = true,
+                                    onItemClick = {
+                                        viewModel.onEvent(
+                                            ProfileEvents.OnFavouritesItemClick(
+                                                navController = navController,
+                                                itemId = state.favourites[index + 1].id
+                                            )
+                                        )
+                                    },
+                                    onFavourite = {
+
+                                    }
+                                )
                             }
-                        )
+                        }
                     }
                 }
             }
+
+            FavouriteColumn.BRANDS -> {
+
+            }
         }
     }
+}
+
+@Composable
+internal fun PageColumn(
+    modifier: Modifier = Modifier,
+    isSelected: Boolean = false,
+    text: String = "",
+    onClick: () -> Unit
+) {
+    Text(
+        text = text,
+        style = if(isSelected)MainTypography.buttonMedium else MainTypography.titleRegular,
+        color = if(isSelected) Black else Grey,
+        modifier = modifier
+            .background(
+                color = if (isSelected) White else LightGrey,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .clickable {
+                onClick.invoke()
+            }
+            .padding(vertical = 9.dp)
+            .clip(RoundedCornerShape(8.dp)),
+        textAlign = TextAlign.Center
+    )
+}
+
+
+@Immutable
+enum class FavouriteColumn {
+    PRODUCTS,BRANDS;
 }

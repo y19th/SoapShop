@@ -140,8 +140,14 @@ fun CatalogScreen(
                         modifier = Modifier.fillMaxHeight(0.1f),
                         horizontalArrangement = Arrangement.spacedBy(7.dp)
                     ) {
+
+                        val modifier = if(filtered.size > index + 1) {
+                            Modifier.weight (0.5f)
+                        } else Modifier.fillMaxWidth(0.5f)
+
+
                         CatalogItem(
-                            modifier = Modifier.weight(0.5f),
+                            modifier = modifier,
                             item = filtered[index],
                             isFavourite = state.favourites.contains(filtered[index].id),
                             onItemClick = {
@@ -163,7 +169,7 @@ fun CatalogScreen(
 
                         if (filtered.size > index + 1) {
                             CatalogItem(
-                                modifier = Modifier.weight(0.5f),
+                                modifier = modifier,
                                 item = filtered[index + 1],
                                 isFavourite = state.favourites.contains(filtered[index + 1].id),
                                 onItemClick = {

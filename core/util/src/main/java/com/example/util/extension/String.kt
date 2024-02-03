@@ -4,7 +4,11 @@ import android.telephony.PhoneNumberUtils
 import androidx.compose.ui.unit.Dp
 
 fun String.isPhone(): Boolean {
-    return PhoneNumberUtils.isGlobalPhoneNumber(this) && this.length == 10
+    return PhoneNumberUtils.isGlobalPhoneNumber(this) && this.length == 11
+}
+
+fun String.isNotPhone(): Boolean {
+    return this.isPhone().not()
 }
 
 fun String.withUnit(unit: String): String {
@@ -14,6 +18,21 @@ fun String.withUnit(unit: String): String {
 fun String.withPhoneMask(): String {
     val regex = """(\d)(\d{3})(\d{3})(\d{2})(\d{2})""".toRegex()
     return regex.replace(this,"+$1 $2 $3-$4-$5")
+}
+
+fun String.isCyrillic(): Boolean {
+    if(this.contains(" ")) return false
+    var isValid = true
+    this.forEach {
+        if(Character.UnicodeBlock.of(it)?.equals(Character.UnicodeBlock.CYRILLIC) == false) {
+            isValid = false
+        }
+    }
+    return isValid
+}
+
+fun String.isNotCyrillic(): Boolean {
+    return this.isCyrillic().not()
 }
 
 /*

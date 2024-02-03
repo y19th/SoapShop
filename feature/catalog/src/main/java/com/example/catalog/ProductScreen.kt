@@ -28,6 +28,7 @@ import androidx.navigation.NavController
 import com.example.ui.R
 import com.example.catalog.components.ExpandedProductItem
 import com.example.catalog.viewmodels.CatalogViewModel
+import com.example.domain.events.CatalogEvents
 
 @Composable
 fun ProductScreen(
@@ -36,9 +37,13 @@ fun ProductScreen(
     productId: String
 ) {
     val state by viewModel.state.collectAsState()
-    val isFavourite by rememberSaveable {
+    val isFavourite = state.favourites.contains(productId)
+
+    val item by rememberSaveable(productId) {
         mutableStateOf(
-            state.favourites.contains(productId)
+            state.products.find { productModel ->
+            productModel.id == productId
+        } ?: state.products[0]
         )
     }
 
@@ -63,10 +68,10 @@ fun ProductScreen(
                 tint = com.example.ui.theme.Black,
                 modifier = Modifier
                     .padding(horizontal = 5.dp)
+                    .clip(CircleShape)
                     .clickable {
                         navController.navigateUp()
                     }
-                    .clip(CircleShape)
             )
 
             Icon(
@@ -77,10 +82,13 @@ fun ProductScreen(
         }
 
         ExpandedProductItem(
-            item = state.products.find { productModel ->
-                productModel.id == productId
-            } ?: state.products[0],
-            isFavourite = isFavourite
+            item = item,
+            isFavourite = isFavourite,
+            onFavourite = {
+                viewModel.onEvent(
+                    CatalogEvents.OnFavourite(model = item)
+                )
+            }
         )
 
     }

@@ -7,7 +7,8 @@ import com.example.domain.events.RegistrationEvents
 import com.example.domain.models.nav.Routes
 import com.example.domain.states.RegistrationState
 import com.example.domain.usecase.RoomUseCase
-import com.example.util.extension.isPhone
+import com.example.util.extension.isNotCyrillic
+import com.example.util.extension.isNotPhone
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,15 +28,13 @@ class RegistrationViewModel @Inject constructor(
     private val _state = MutableStateFlow(RegistrationState())
     val state = _state.asStateFlow()
 
-    /*TODO проверку на кириллицу*/
-    /*TODO fix phone number */
     fun onEvent(event: RegistrationEvents) {
         when (event) {
             is RegistrationEvents.OnNameChange -> {
                 _state.update {
                     it.copy(
                         name = event.newValue,
-                        isNameError = event.newValue.isEmpty()
+                        isNameError = event.newValue.isNotCyrillic()
                     )
                 }
                 updateValid()
@@ -45,7 +44,7 @@ class RegistrationViewModel @Inject constructor(
                 _state.update {
                     it.copy(
                         surname = event.newValue,
-                        isSurnameError = event.newValue.isEmpty()
+                        isSurnameError = event.newValue.isNotCyrillic()
                     )
                 }
                 updateValid()
@@ -55,7 +54,7 @@ class RegistrationViewModel @Inject constructor(
                 _state.update {
                     it.copy(
                         phone = event.newValue,
-                        isPhoneError = event.newValue.isPhone().not()
+                        isPhoneError = event.newValue.isNotPhone()
                     )
                 }
                 updateValid()
@@ -70,7 +69,7 @@ class RegistrationViewModel @Inject constructor(
                                 id = 0,
                                 name = name,
                                 surname = surname,
-                                phone = phone.replaceRange(0,0,"7")
+                                phone = phone
                             )
                         )
                         event.navController.navigate(Routes.CATALOG.name)

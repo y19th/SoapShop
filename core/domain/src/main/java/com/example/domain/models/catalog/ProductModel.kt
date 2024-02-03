@@ -1,5 +1,6 @@
 package com.example.domain.models.catalog
 
+import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import com.example.data.models.ProductResponse
 import com.example.data.room.converters.InfoList
@@ -8,8 +9,10 @@ import com.example.data.room.entites.FeedbackEntity
 import com.example.data.room.entites.PriceEntity
 import com.example.data.room.entites.Product
 import com.example.data.room.entites.ProductEntity
+import kotlinx.parcelize.Parcelize
 
 @Immutable
+@Parcelize
 data class ProductModel(
     val id: String = "",
     val title: String = "",
@@ -21,7 +24,7 @@ data class ProductModel(
     val description: String = "",
     val info: List<InfoModel> = listOf(),
     val ingredients: String = ""
-) {
+): Parcelable {
     fun toProductEntity() = ProductEntity(
         id = id,
         title = title,

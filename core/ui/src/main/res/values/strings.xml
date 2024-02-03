@@ -11,8 +11,6 @@
     <string name="text_error">Неверно введено поле %s</string>
     <string name="title_catalog">Каталог</string>
     <string name="catalog_filter">Фильтры</string>
-    <string name="product_order_accessible">Доступно для заказа %d штук</string>
-    <string name="product_reviews">%d отзыва</string>
     <plurals name="items_access">
         <item quantity="zero">Недоступно для заказа</item>
         <item quantity="one">Доступна для заказа %d штука</item>
@@ -50,4 +48,6 @@
     <string name="profile_offer">Оферта</string>
     <string name="profile_products_back">Возврат товара</string>
     <string name="profile_exit">Выйти</string>
+    <string name="profile_products">Товары</string>
+    <string name="profile_brands">Бренды</string>
 </resources>

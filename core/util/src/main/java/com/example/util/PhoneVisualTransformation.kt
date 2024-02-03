@@ -24,6 +24,14 @@ class PhoneVisualTransformation(
             var textIndex = 0
             with(phoneMask) {
                 while (textIndex < trimmed.length && maskIndex < mask.length) {
+
+                    if(maskIndex == 0 && textIndex == 0) {
+                        if(trimmed[0] == '7') {
+                            append('+')
+                        }
+                    }
+
+
                     if (mask[maskIndex] != maskNum) {
                         val nextDigitIndex = mask.indexOf(maskNum, maskIndex)
                         append(mask.substring(maskIndex, nextDigitIndex))
@@ -36,7 +44,11 @@ class PhoneVisualTransformation(
         }
         return TransformedText(
             text = annotatedString,
-            offsetMapping = PhoneOffsetMapper(phoneMask)
+            offsetMapping = PhoneOffsetMapper(
+                phoneMask =
+                if(annotatedString.contains('+')) PhoneMask(mask = "+0 000 000-00-00")
+                else phoneMask
+            )
         )
 
 
@@ -71,6 +83,6 @@ class PhoneVisualTransformation(
 
 @Stable
 data class PhoneMask(
-    val mask: String = "+7 000 000 00 00",
+    val mask: String = "0 000 000-00-00",
     val maskNum: Char = '0'
 )
